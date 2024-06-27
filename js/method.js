@@ -12,14 +12,33 @@ document.getElementById('btnThemNV').onclick = function(e){
         nhanVien[id] = value;
     }
     let StringTB = '';
-    if (nhanVien.taiKhoan.length < 4 || nhanVien.taiKhoan.length > 6) {
+
+    // tai khoản
+    if (nhanVien.taiKhoan.length < 4 || nhanVien.taiKhoan.length > 6 || nhanVien.taiKhoan == '') {
         
         StringTB = document.getElementById('tbTKNV');
         StringTB.style.display = 'block';
         StringTB.innerHTML = 'nhập mật khẩu 4-6 ký tự'
         return;
-    } else {
-        document.getElementById('tbTKNV').innerText = '';
+    }
+    // họ tên
+
+    if (nhanVien.hoTen == '' || /\d/.test(nhanVien.hoTen)) {
+        StringTB = document.getElementById('tbTen');
+        if (StringTB) {
+            StringTB.style.display = 'block';
+            StringTB.innerHTML = 'Tên nhân viên phải là chữ và không được để trống.';
+        }
+        return;
+    }
+    // email
+
+    if (nhanVien.email == '') { // || !emailPattern.test(nhanVien.email)
+        StringTB = document.getElementById('tbEmail');
+        StringTB.style.display = 'block';
+         StringTB.innerHTML = 'nhập đúng định dạng email và không được để trống.';
+        
+        return;
     }
     let tongLuong = 0;
     if(nhanVien.chucVu == 'Sếp'){
@@ -43,7 +62,7 @@ document.getElementById('btnThemNV').onclick = function(e){
         doiTuongNhanVien = 'nhân viên khá'
     }
     else if(nhanVien.gioLam < 160){
-        doiTuongNhanVien = 'nhân viên trung bình'
+        doiTuongNhanVien = 'trung bình'
     }
     console.log(nhanVien);
     let htmlString = '';
@@ -56,13 +75,17 @@ document.getElementById('btnThemNV').onclick = function(e){
 		<td>${nhanVien.chucVu}</td>
 		<td>${tongLuong}</td>
 		<td>${doiTuongNhanVien}</td>
+        <td>
+                <button class="btn btn-primary mx-2">Chỉnh sửa</button>
+                <button class="btn btn-danger" onclick="xoaSinhVien(this)" >Xoá</button>
+            </td>
 									
 	</tr>
     
-    `
+    ` 
     document.querySelector('#tableDanhSach').innerHTML += htmlString;
 } 
-// document.getElementById('btnThemNV').onclick = function(e){
-
-//     alert('hi')
-// }
+window.xoaSinhVien = function (tag) {
+    // console.log(tag)
+    tag.closest('tr').remove();
+} 
