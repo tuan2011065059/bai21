@@ -1,5 +1,5 @@
 import { NhanVien } from "./nhanVien.js";
-
+let arrNhanVien = [];
 document.getElementById('btnThemNV').onclick = function(e){
     
     e.preventDefault();
@@ -12,6 +12,7 @@ document.getElementById('btnThemNV').onclick = function(e){
         nhanVien[id] = value;
     }
     let StringTB = '';
+    arrNhanVien.push(nhanVien);
 
     // tai khoản
     if (nhanVien.taiKhoan.length < 4 || nhanVien.taiKhoan.length > 6 || nhanVien.taiKhoan == '') {
@@ -77,7 +78,7 @@ document.getElementById('btnThemNV').onclick = function(e){
 		<td>${doiTuongNhanVien}</td>
         <td>
                 <button class="btn btn-primary mx-2">Chỉnh sửa</button>
-                <button class="btn btn-danger" onclick="xoaSinhVien(this)" >Xoá</button>
+                <button class="btn btn-danger" onclick="xoaNhanVien(this)" >Xoá</button>
             </td>
 									
 	</tr>
@@ -85,7 +86,35 @@ document.getElementById('btnThemNV').onclick = function(e){
     ` 
     document.querySelector('#tableDanhSach').innerHTML += htmlString;
 } 
-window.xoaSinhVien = function (tag) {
-    // console.log(tag)
+
+
+// window.xoaNhanVien = function (maNhanVien) {
+//     let indexDel = arrNhanVien.findIndex(nhanVien => nhanVien.taiKhoan === maNhanVien);
+//     if(indexDel !== -1) { 
+//         arrNhanVien.splice(indexDel,1);
+        
+//         renderTableNhanVien(arrNhanVien); 
+//     }
+// }
+
+// window.chinhSua = function (maNhanVien) {
+//     document.querySelector('#taiKhoan').disabled = true;
+//     let svUpdate = arrNhanVien.find(nhanVien => nhanVien.taiKhoan === maNhanVien);
+//     if(svUpdate) {
+//         for (let key in svUpdate){
+//             document.querySelector(`#${key}`).value = svUpdate[key];
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+window.xoaNhanVien = function (tag) {
+    
     tag.closest('tr').remove();
 } 
