@@ -1,5 +1,9 @@
+
+
 import { NhanVien } from "./nhanVien.js";
 let arrNhanVien = [];
+let tongLuong = 0;
+let doiTuongNhanVien = '';
 document.getElementById('btnThemNV').onclick = function(e){
     
     e.preventDefault();
@@ -13,7 +17,7 @@ document.getElementById('btnThemNV').onclick = function(e){
     }
     let StringTB = '';
     arrNhanVien.push(nhanVien);
-
+   
     // tai khoản
     if (nhanVien.taiKhoan.length < 4 || nhanVien.taiKhoan.length > 6 || nhanVien.taiKhoan == '') {
         
@@ -41,7 +45,7 @@ document.getElementById('btnThemNV').onclick = function(e){
         
         return;
     }
-    let tongLuong = 0;
+    
     if(nhanVien.chucVu == 'Sếp'){
        tongLuong = nhanVien.luongCoBan * 3;
     }
@@ -52,7 +56,7 @@ document.getElementById('btnThemNV').onclick = function(e){
         tongLuong = nhanVien.luongCoBan;
     }
 
-    let doiTuongNhanVien = ''
+    
     if(nhanVien.gioLam >=192){
         doiTuongNhanVien = 'nhân viên xuất sắc'
     }
@@ -66,8 +70,19 @@ document.getElementById('btnThemNV').onclick = function(e){
         doiTuongNhanVien = 'trung bình'
     }
     console.log(nhanVien);
+
+    randerTableNhanVien(arrNhanVien);
+    console.log(randerTableNhanVien(arrNhanVien));
+
+    
+} 
+
+
+
+window.randerTableNhanVien = function (arrNV){
     let htmlString = '';
-    htmlString = `
+    for(let nhanVien of arrNV){
+        htmlString+= `
     <tr>
 		<td>${nhanVien.taiKhoan}</td>
 		<td>${nhanVien.hoTen}</td>
@@ -77,44 +92,56 @@ document.getElementById('btnThemNV').onclick = function(e){
 		<td>${tongLuong}</td>
 		<td>${doiTuongNhanVien}</td>
         <td>
-                <button class="btn btn-primary mx-2" data-toggle="modal" data-target="#myModal">Chỉnh sửa</button>
-                <button class="btn btn-danger" onclick="xoaNhanVien(this)" >Xoá</button>
+                <button class="btn btn-primary mx-2" onclick="chinhSua('${nhanVien.taiKhoan}')" data-toggle="modal" data-target="#myModal">Chỉnh sửa</button>
+                <button class="btn btn-danger" onclick="xoaNhanVien('${nhanVien.taiKhoan}')" >Xoá</button>
             </td>
 									
 	</tr>
     
     ` 
-    document.querySelector('#tableDanhSach').innerHTML += htmlString;
-} 
+    }
 
+    document.getElementById('tableDanhSach').innerHTML =htmlString;
+    return htmlString;
+}
+// xoá nhân viên
+window.xoaNhanVien = function (maNhanVien){
+    let indexDel = arrNhanVien.findIndex(nhanVien => nhanVien.taiKhoan === maNhanVien );
+    if(indexDel !== -1){
+        arrNhanVien.splice(indexDel, 1);
+        randerTableNhanVien(arrNhanVien);
+    }
+}
 
-// window.xoaNhanVien = function (maNhanVien) {
-//     let indexDel = arrNhanVien.findIndex(nhanVien => nhanVien.taiKhoan === maNhanVien);
-//     if(indexDel !== -1) { 
-//         arrNhanVien.splice(indexDel,1);
-        
-//         renderTableNhanVien(arrNhanVien); 
-//     }
-// }
+// chỉnh sửa thông tin nhân viên 
 
-// window.chinhSua = function (maNhanVien) {
-//     document.querySelector('#taiKhoan').disabled = true;
-//     let svUpdate = arrNhanVien.find(nhanVien => nhanVien.taiKhoan === maNhanVien);
-//     if(svUpdate) {
-//         for (let key in svUpdate){
-//             document.querySelector(`#${key}`).value = svUpdate[key];
-//         }
-//     }
-// }
+window.chinhSua = function (maNhanVien){
+    document.querySelector('#taiKhoan').disabled = true;
+    let edit = arrNhanVien.find(nhanVien => nhanVien.taiKhoan === maNhanVien);
 
+    if(edit){
 
-
-
-
-
-
-
-window.xoaNhanVien = function (tag) {
+        for( let key in edit){
+            document.querySelector(`#${key}`).value = edit[key];
+        }
     
-    tag.closest('tr').remove();
-} 
+    }
+}
+document.querySelector('#btnCapNhat').onclick = function(e){
+    let upDate = new NhanVien ();
+    let arrInput = document.querySelectorAll('.modal-body .form-control');
+    for( let input of arrInput){
+        let id = input.id;
+        let value = input.value;
+        upDate[id] = value;
+
+    }
+    let mangNhanVien = arrNhanVien.find(nhanVien => nhanVien.taiKhoan ===upDate.taiKhoan);
+    if(mangNhanVien){
+        for(let key in mangNhanVien){
+            mangNhanVien[key] = upDate[key];
+
+        }
+        randerTableNhanVien(arrNhanVien);
+    }
+}
