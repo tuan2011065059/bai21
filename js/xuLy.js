@@ -136,12 +136,13 @@ document.querySelector('#btnCapNhat').onclick = function(e){
         upDate[id] = value;
 
     }
-    let mangNhanVien = arrNhanVien.find(nhanVien => nhanVien.taiKhoan ===upDate.taiKhoan);
-    if(mangNhanVien){
+    let mangNhanVien = arrNhanVien.findIndex(nhanVien => nhanVien.taiKhoan ===upDate.taiKhoan);
+    if(mangNhanVien !== -1 ){
         for(let key in mangNhanVien){
             mangNhanVien[key] = upDate[key];
 
         }
+        
         randerTableNhanVien(arrNhanVien);
     }
 }
